@@ -9,7 +9,9 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.swing.*;
 
-/** Our simple calculator. */
+/**
+ * Our simple calculator.
+ */
 public class Calculator extends JFrame {
     private JTextField lhs;
     private JTextField rhs;
@@ -17,7 +19,9 @@ public class Calculator extends JFrame {
     private Map<String, Operation> operations;
     private JTextField result;
 
-    /** Create a new calculator window. */
+    /**
+     * Create a new calculator window.
+     */
     public Calculator() {
         super();
 
@@ -44,14 +48,20 @@ public class Calculator extends JFrame {
         operations.put("Add", new Add());
 
         // TODO
-        // Add a new operation "Sub" for the subtraction of two integers as an (instance of a) Java
-        // class (you have yet to write this class)
+        operations.put("Sub", new Sub());
 
         // TODO
         // Add a new operation "Mul" for the multiplication of two integers as an anonymous class
-
+        operations.put("Mul", new Operation() {
+            @Override
+            public int doOperation(int a, int b) {
+                return a * b;
+            }
+        });
         // TODO
         // Add a new operation "Div" for the division of two integers as a lambda expression
+        operations.put("Div", (a, b) -> a / b);
+
 
         operationSelector = new JComboBox<>();
         operations.forEach((key, value) -> operationSelector.addItem(key));
@@ -59,16 +69,13 @@ public class Calculator extends JFrame {
         // TODO
         // Replace the anonymous class with a lambda expression
         operationSelector.addActionListener(
-                new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        try {
-                            result.setText("" + calculate());
-                        } catch (NumberFormatException ex) {
-                            System.out.println("Invalid input.");
-                        }
-                    }
-                });
+            e -> {
+                try {
+                    result.setText("" + calculate());
+                } catch (NumberFormatException ex) {
+                    System.out.println("Invalid input.");
+                }
+            });
     }
 
     /**
@@ -84,12 +91,12 @@ public class Calculator extends JFrame {
         // input left operand
         lhs = new JTextField("first operand", 8);
         lhs.addFocusListener(
-                new FocusAdapter() {
-                    @Override
-                    public void focusGained(final FocusEvent pE) {
-                        lhs.selectAll();
-                    }
-                });
+            new FocusAdapter() {
+                @Override
+                public void focusGained(final FocusEvent pE) {
+                    lhs.selectAll();
+                }
+            });
         lhs.setInputVerifier(new JTextFieldVerifier(lhs));
         panel.add(lhs);
 
@@ -99,25 +106,25 @@ public class Calculator extends JFrame {
         // input right operand
         rhs = new JTextField("second operand", 8);
         rhs.addFocusListener(
-                new FocusAdapter() {
-                    @Override
-                    public void focusGained(final FocusEvent pE) {
-                        rhs.selectAll();
-                    }
-                });
+            new FocusAdapter() {
+                @Override
+                public void focusGained(final FocusEvent pE) {
+                    rhs.selectAll();
+                }
+            });
         rhs.setInputVerifier(new JTextFieldVerifier(rhs));
         panel.add(rhs);
 
         // button to trigger the calculation
         JButton solutionButton = new JButton("=");
         solutionButton.addActionListener(
-                e -> {
-                    try {
-                        result.setText("" + calculate());
-                    } catch (NumberFormatException ex) {
-                        System.out.println("Invalid input.");
-                    }
-                });
+            e -> {
+                try {
+                    result.setText("" + calculate());
+                } catch (NumberFormatException ex) {
+                    System.out.println("Invalid input.");
+                }
+            });
         panel.add(solutionButton);
 
         // display result
@@ -144,7 +151,9 @@ public class Calculator extends JFrame {
         return operation.doOperation(a, b);
     }
 
-    /** Tests the text field to verify whether an integer has been entered. */
+    /**
+     * Tests the text field to verify whether an integer has been entered.
+     */
     private static class JTextFieldVerifier extends InputVerifier {
         private final JTextField tf;
 
